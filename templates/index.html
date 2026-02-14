@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Daily Market Dashboard</title>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: white;
+            font-family: Arial;
+            padding: 40px;
+        }
+
+        h1 {
+            font-size: 36px;
+        }
+
+        table {
+            width: 75%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th {
+            background-color: #1e293b;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #334155;
+            font-size: 16px;
+        }
+
+        .positive {
+            color: #22c55e;
+            font-weight: bold;
+        }
+
+        .negative {
+            color: #ef4444;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Daily Market Dashboard</h1>
+<div style="margin-top:20px; margin-bottom:20px; padding:15px; background-color:#1e293b; border-radius:8px;">
+    <strong>Market Summary:</strong>
+    <p>{{ summary }}</p>
+</div>
+
+<div style="margin-bottom:30px; padding:15px; background-color:#0f172a; border:1px solid #334155; border-radius:8px;">
+    <strong>Daily AI Commentary:</strong>
+    <p>{{ commentary if commentary else "Awaiting daily commentary..." }}</p>
+</div>
+
+
+<table>
+<tr>
+    <th>Symbol</th>
+    <th>Description</th>
+    <th>Price</th>
+    <th>% Change</th>
+    <th>Expense Ratio</th>
+</tr>
+
+{% for symbol, info in data.items() %}
+<tr>
+    <td>{{ symbol }}</td>
+    <td>{{ info.description }}</td>
+    <td>${{ "%.2f"|format(info.price) }}</td>
+
+    <td class="{% if info.change >= 0 %}positive{% else %}negative{% endif %}">
+        {{ "%.2f"|format(info.change) }}%
+    </td>
+
+    <td>
+    {% if info.expense %}
+        {{ "%.2f"|format(info.expense) }}%
+    {% else %}
+        —
+    {% endif %}
+    </td>
+</tr>
+{% endfor %}
+
+</table>
+
+</body>
+</html>
